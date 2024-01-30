@@ -1,4 +1,4 @@
-package com.javaex.ex01;
+package com.javaex.ex02;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,9 +11,43 @@ import java.util.List;
 public class AuthorDao {
 	
 	//필드
+	// 0. import java.sql.*;
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
 	//생성자 - 디폴트
 	//메소드 gs
 	//메소드 - 일반
+	public void getConnection() {
+			try {
+				// 1. JDBC 드라이버 (Oracle) 로딩
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				// 2. Connection 얻어오기
+				String url = "jdbc:mysql://localhost:3306/book_db";
+				conn = DriverManager.getConnection(url, "book", "book");
+			} catch (ClassNotFoundException e) {
+				System.out.println("error: 드라이버 로딩 실패 - " + e);
+			} catch (SQLException e) {
+			System.out.println("error:" + e);
+			}
+	}//getConnection()
+	
+	public void close() {
+		// 5. 자원정리
+			try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (conn != null) {
+				conn.close();
+			}
+			} catch (SQLException e) {
+				System.out.println("error:" + e);
+				}
+	}
+	
 	//작가 리스트
 	public List<AuthorVo> authorList() {
 		//리스트 만들기
@@ -144,18 +178,8 @@ public class AuthorDao {
 		
 		int count=-1;
 		
-		// 0. import java.sql.*;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-		// 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			
-		// 2. Connection 얻어오기
-			String url = "jdbc:mysql://localhost:3306/book_db";
-			conn = DriverManager.getConnection(url, "book", "book");
-			
+		this.getConnection();
+		
 		// 3. SQL문 준비 / 바인딩 / 실행
 			String query="";
 			query+=" insert into author ";
@@ -170,26 +194,13 @@ public class AuthorDao {
 		// 4.결과처리
 			System.out.println(count+"건 등록 되었습니다.");
 			
-		} catch (ClassNotFoundException e) {
-		System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 		System.out.println("error:" + e);
 		} finally {
-		// 5. 자원정리
-		try {
-		if (rs != null) {
-		rs.close();
 		}
-		if (pstmt != null) {
-		pstmt.close();
-		}
-		if (conn != null) {
-		conn.close();
-		}
-		} catch (SQLException e) {
-		System.out.println("error:" + e);
-		}
-		}
+		
+		this.close;
+		
 		return count;
 	}//authorInsert()
 

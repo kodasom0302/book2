@@ -9,7 +9,8 @@ public class BookApp {
 		AuthorDao authorDao=new AuthorDao();
 		
 		//작가 등록
-		//authorDao.authorInsert("이효리", "제주도민");
+		int cnt=authorDao.authorInsert("이효리", "제주도민");
+		System.out.println(cnt+" success");
 		
 		//작가 삭제
 		//authorDao.authorDelete(14);
