@@ -13,6 +13,10 @@ public class AuthorVo {
 		this.authorName = authorName;
 		this.authorDesc = authorDesc;
 	}
+	public AuthorVo(String authorName, String authorDesc) {
+		this.authorName = authorName;
+		this.authorDesc = authorDesc;
+	}
 	
 	public int getAuthorId() {
 		return authorId;
